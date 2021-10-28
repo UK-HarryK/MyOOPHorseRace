@@ -1,15 +1,23 @@
 "use strict"
 const racetrack = document.getElementById("racetrack")
-const finishLine = 200
+const finishLine = 500
+
+// class Race{
+//     constructor()
+
+// }
+
+
 class Horse{
-    constructor(horseNumber){
-        this.name = `Horse${horseNumber}`
+    constructor(colour){
+        this.name = `${colour} Horse`
         this.element = document.createElement("div")
         this.element.classList.add("horse")
         this.X = 0
+        this.element.style.backgroundColor = colour
         racetrack.appendChild(this.element)
     }
-    runOnce(){
+    move(){
         this.X += Math.floor(Math.random()*10)
         this.element.style.transform = `translateX(${this.X}px)`
     }
@@ -25,33 +33,35 @@ class Horse{
     }
 
 }
-let horses = 6
-let horseStorage = []
+let numHorses = 6
+let horses = []
 let colours = ["red", "blue", "yellow", "orange", "cyan", "black"]
 
 function horseSetUp(numOfHorses){
     for(let i=0; i<numOfHorses; i++){
-        horseStorage[i] = new Horse(i)
-        horseStorage[i].element.style.top = 50 + i*25 + "px"
-        horseStorage[i].element.style.backgroundColor = colours[i]
-        
+        horses[i] = new Horse(colours[i])
+        horses[i].element.style.top = 50 + i*25 + "px"
     }
 }
 
-function move(){
-    for(let h of horseStorage){
-        h.runOnce()
+function moveHorses(){
+    let winner = null
+    for(let h of horses){
+        h.move()
         if(h.checkWin()){
-            for(let h of horseStorage){
-                h.reset()
-                window.cancelAnimationFrame(move)
-            }
+            winner = h
         }
     }
-    requestAnimationFrame(move)
+    if(!winner){
+        requestAnimationFrame(moveHorses)
+    }else{
+        for(let h of horses){
+            h.reset()
+        }
+    }
 }
 
 function startRace(){
-    window.requestAnimationFrame(move)
+    requestAnimationFrame(moveHorses)
 }
-horseSetUp(horses)
+horseSetUp(numHorses)
