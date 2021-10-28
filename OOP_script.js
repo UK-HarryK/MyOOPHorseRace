@@ -2,10 +2,14 @@
 const racetrack = document.getElementById("racetrack")
 const finishLine = 500
 
-// class Race{
-//     constructor()
+class Race{
+    constructor(finishLinePX){
+        this.racetrack = document.createElement("div")
+        body.appendChild(this.racetrack)
+        this.finishLine = finishLinePX
+    }
 
-// }
+}
 
 
 class Horse{
